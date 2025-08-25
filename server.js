@@ -7,6 +7,11 @@ const BaguaSystem = require('./core/bagua');
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Vercel 部署优化
+if (process.env.VERCEL) {
+  app.set('trust proxy', 1);
+}
+
 // 中间件
 app.use(cors());
 app.use(bodyParser.json());
