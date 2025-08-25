@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 八卦算命 - 智慧指引人生</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'paper-lightest': '#F8F6F1',
+                        'paper-light': '#F0EBE0', 
+                        'paper-medium': '#E8DDD0',
+                        'paper-dark': '#D4C4A8',
+                        'paper-darkest': '#C0A882',
+                        'ink-dark': '#4A3E2A',
+                        'ink-medium': '#6B5B45',
+                        'accent-warm': '#A67C52'
+                    },
+                    fontFamily: {
+                        'chinese': ['SimSun', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background-color: #F0EBE0;
+            background-attachment: fixed;
+        }
+        .ancient-paper {
+            background-color: #F8F6F1;
+            border: 1px solid #E8DDD0;
+        }
+        .bagua-circle {
+            animation: rotate 20s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- 标题 -->
+        <div class="text-center mb-20">
+            <h1 class="text-8xl font-bold text-ink-dark mb-8">
+                ☯ AI 八卦算命 ☯
+            </h1>
+            <p class="text-3xl text-ink-medium font-medium">
+                承古人智慧 · 启现代迷津 · 天人合一 · 道法自然
+            </p>
+        </div>
+
+        <!-- 统一容器宽度，保持对齐 -->
+        <div class="max-w-6xl mx-auto space-y-20">
+            <!-- 上部：太极图区域 -->
+            <div class="text-center">
+                <div class="text-9xl mb-12 select-none">
+                    ☯
+                </div>
+                
+                <div class="ancient-paper rounded-lg p-12">
+                    <p class="text-ink-dark font-medium text-3xl text-center mb-6">
+                        八卦定乾坤，阴阳判吉凶
+                    </p>
+                    <p class="text-ink-dark font-medium text-3xl text-center">
+                        问卜求签，指点迷津
+                    </p>
+                </div>
+            </div>
+
+            <!-- 中部：输入区域 -->
+            <div class="ancient-paper rounded-lg p-16">
+                <h2 class="text-5xl font-bold text-ink-dark mb-16 text-center">
+                    诚心问卜
+                </h2>
+                
+                <form id="fortuneForm" class="space-y-12">
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div>
+                            <label class="block text-ink-dark font-bold mb-6 text-xl">
+                                问卜事项：
+                            </label>
+                            <select id="category" class="w-full p-6 border-3 border-ink-medium rounded-lg bg-paper-lightest text-ink-dark text-xl font-medium focus:border-ink-dark focus:outline-none">
+                                <option value="综合">综合运势</option>
+                                <option value="事业">事业财运</option>
+                                <option value="感情">感情婚姻</option>
+                                <option value="健康">健康平安</option>
+                                <option value="学业">学业考试</option>
+                                <option value="出行">出行旅途</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-ink-dark font-bold mb-6 text-xl">
+                                详细问题：
+                            </label>
+                            <textarea 
+                                id="question" 
+                                rows="6" 
+                                placeholder="请详细描述您的问题，越具体越准确..."
+                                class="w-full p-6 border-3 border-ink-medium rounded-lg bg-paper-lightest text-ink-dark placeholder-ink-medium/60 text-xl resize-none focus:border-ink-dark focus:outline-none"
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <div class="text-center pt-8">
+                        <button 
+                            type="submit" 
+                            class="bg-ink-dark hover:bg-ink-medium text-paper-lightest font-bold py-8 px-20 rounded-lg transition-colors duration-300 text-3xl border-2 border-ink-dark"
+                        >
+                            🔮 开始算命 🔮
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 下部：结果显示 -->
+            <div id="result" class="ancient-paper rounded-lg p-16 min-h-96 hidden">
+                <h2 class="text-5xl font-bold text-ink-dark mb-16 text-center">
+                    卦象解析
+                </h2>
+                <div id="resultContent" class="space-y-8">
+                    <!-- 结果将在这里显示 -->
+                </div>
+            </div>
+
+            <div id="loading" class="ancient-paper rounded-lg p-16 text-center hidden">
+                <div class="animate-spin text-9xl mb-12">☯</div>
+                <p class="text-ink-dark text-3xl font-medium">正在观天象，测卦象...</p>
+            </div>
+
+            <!-- 默认显示的占卜说明 -->
+            <div id="instructions" class="ancient-paper rounded-lg p-16">
+                <h3 class="text-5xl font-bold text-ink-dark mb-12 text-center">占卜须知</h3>
+                <div class="text-ink-medium space-y-8 text-xl max-w-4xl mx-auto">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <p class="text-center">📿 <strong>诚心问卜：</strong>心诚则灵，杂念不生</p>
+                        <p class="text-center">🎯 <strong>具体明确：</strong>问题越详细，指导越精准</p>
+                        <p class="text-center">⏰ <strong>时机重要：</strong>选择安静时刻，心境平和</p>
+                        <p class="text-center">🙏 <strong>敬天敬地：</strong>以恭敬之心对待占卜</p>
+                    </div>
+                    <div class="pt-12 border-t-2 border-paper-dark text-center">
+                        <p class="text-2xl font-medium text-ink-dark mb-4">
+                            "易有太极，是生两仪，两仪生四象，四象生八卦"
+                        </p>
+                        <p class="text-ink-medium/70 text-lg">—— 《周易·系辞传》</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('fortuneForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const category = document.getElementById('category').value;
+            const question = document.getElementById('question').value;
+            
+            // 显示加载状态
+            document.getElementById('instructions').classList.add('hidden');
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('loading').classList.remove('hidden');
+            
+            try {
+                const response = await fetch('/api/fortune', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ category, question })
+                });
+                
+                const data = await response.json();
+                
+                // 显示结果
+                setTimeout(() => {
+                    displayResult(data);
+                    document.getElementById('loading').classList.add('hidden');
+                    document.getElementById('result').classList.remove('hidden');
+                }, 2000); // 2秒延迟增加神秘感
+                
+            } catch (error) {
+                console.error('占卜失败:', error);
+                document.getElementById('loading').classList.add('hidden');
+                alert('占卜过程中出现问题，请稍后再试');
+            }
+        });
+
+        function displayResult(data) {
+            const resultContent = document.getElementById('resultContent');
+            resultContent.innerHTML = `
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl font-bold text-ink-dark mb-6">${data.hexagram.name}</h3>
+                    <p class="text-ink-medium text-xl mb-8">${data.hexagram.meaning}</p>
+                    <div class="flex justify-center items-center space-x-8">
+                        <div class="text-center">
+                            <div class="text-6xl mb-2">${data.upperGua.info.symbol}</div>
+                            <p class="text-ink-dark font-bold text-lg">上卦：${data.upperGua.name}</p>
+                            <p class="text-ink-medium text-sm">${data.upperGua.info.element} · ${data.upperGua.info.attribute}</p>
+                        </div>
+                        <div class="text-4xl text-ink-dark">☯</div>
+                        <div class="text-center">
+                            <div class="text-6xl mb-2">${data.lowerGua.info.symbol}</div>
+                            <p class="text-ink-dark font-bold text-lg">下卦：${data.lowerGua.name}</p>
+                            <p class="text-ink-medium text-sm">${data.lowerGua.info.element} · ${data.lowerGua.info.attribute}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-paper-medium rounded-lg p-6">
+                        <h4 class="text-2xl font-bold text-ink-dark mb-4">🔮 卦象解读</h4>
+                        <p class="text-ink-medium text-lg leading-relaxed">${data.interpretation}</p>
+                    </div>
+
+                    <div class="bg-paper-medium rounded-lg p-6">
+                        <h4 class="text-2xl font-bold text-ink-dark mb-4">💡 运势建议</h4>
+                        <ul class="text-ink-medium space-y-3 text-lg">
+                            ${data.advice.map(advice => `<li class="flex items-start"><span class="text-ink-dark mr-2">•</span><span>${advice}</span></li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-paper-medium rounded-lg p-6">
+                    <div class="grid md:grid-cols-3 gap-6 text-center">
+                        <div>
+                            <h4 class="text-xl font-bold text-ink-dark mb-2">🧭 吉利方位</h4>
+                            <p class="text-ink-medium text-lg font-medium">${data.luckyDirection}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-ink-dark mb-2">🌸 有利时节</h4>
+                            <p class="text-ink-medium text-lg font-medium">${data.favorableTime}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-ink-dark mb-2">⏰ 当前时辰</h4>
+                            <p class="text-ink-medium text-lg font-medium">${data.timeElement.shichen}时 (${data.timeElement.element})</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

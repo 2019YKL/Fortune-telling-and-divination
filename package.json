@@ -1,0 +1,23 @@
+{
+  "name": "ai-fortune-telling",
+  "version": "1.0.0",
+  "description": "AI 八卦算命应用 - 基于传统易经八卦的智能算命系统",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "echo 'Building...'",
+    "lint": "echo 'Linting...'"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["算命", "八卦", "易经", "AI", "fortune-telling"],
+  "author": "",
+  "license": "MIT"
+}
